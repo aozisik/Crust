@@ -2,6 +2,7 @@
 
 Crust is a micro-php-framework that makes use of ActiveRecord and Smarty.
 It basically aims to introduce the simplicity of Ruby on Rails to PHP without much complication.
+Now it's even more compact and tidier than ever. And supports intelligent mapping!
 
 Just place it in your server folder and it will run out of the box.
 Configure it according to your needs.
@@ -22,4 +23,4 @@ Configure it according to your needs.
 * See app/config.php
 * See app/bootstrap.php
 
-> Crust PHP Framework 0.9.3
+> Crust PHP Framework 0.9.4

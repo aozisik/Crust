@@ -1,13 +1,13 @@
 <?php
 /**
 * @package Crust Framework
-* @version 0.9.3
+* @version 0.9.4
 * @author Ahmet Özışık
 *
 * Config file
 */
 
-define('CRUST_VERSION', '0.9.3');
+define('CRUST_VERSION', '0.9.4');
 define('IN_SCRIPT'   , true);                  
 
 define('SERVICE_MAIL', 'no-reply@example.com');

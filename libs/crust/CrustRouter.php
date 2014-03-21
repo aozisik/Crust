@@ -1,7 +1,7 @@
 <?php
 /**
 * @package Crust Framework
-* @version 0.9.3
+* @version 0.9.4
 * @author Ahmet Özışık
 *
 * Router handles REQUEST URLs and directs them to corresponding controllers and actions 
@@ -62,8 +62,6 @@ class CrustRouter
 		$this->request_uri = $request_uri;
 		$process 		   = $this->request_uri;
 
-
-
 		if(SUB_FOLDER)
 			$process = substr($process, strlen(SUB_FOLDER), strlen($process));
 
@@ -93,6 +91,29 @@ class CrustRouter
 		return $key;
 	}
 
+	private function check_map_match($route)
+	{
+		if(empty($route))
+			return false; // empty array, thus no match
+
+		$controller = $this->wildcard_keys($route[0]);
+		$action     = (isset($route[1])) ? $route[1] : $this->wildcard_keys(':action');
+		$params		= (count($route) > 2) ? array_slice($route, 2) : $this->wildcard_keys(':params');
+
+
+
+		if($controller != CrustRouter::$controller)
+			return false; // not matching controller
+
+		if($action != CrustRouter::$action)
+			return false; // not matching action
+
+		if($params != CrustRouter::$params)
+			return false;
+
+		return true;
+	}
+
 	/**
 	* :controller and :action and :params are wildcard
 	*/
@@ -101,23 +122,12 @@ class CrustRouter
 		$source_array = explode('/', $source);
 		$target_array = explode('/', $target);
 
-		$source_params = (count($source_array) > 2) ? array_slice($source_array, 2) : array();		
-		$target_params = (count($target_array) > 2) ? array_slice($target_array, 2) : array();		
-		
-		if(isset($source_array[0]) and isset($target_array[0]) and (CrustRouter::$controller == $source_array[0] or $source_array[0] == ':controller'))
-		{
-			CrustRouter::$controller = $this->wildcard_keys($target_array[0]);
-		}
+		if(!$this->check_map_match($source_array))
+			return; // this map does not concern us, it is not a match
 
-		if(isset($source_array[1]) and (CrustRouter::$action == $source_array[1] or $source_array[1] == ':action'))
-		{
-			CrustRouter::$action = $this->wildcard_keys($target_array[1]);
-		}
-
-		if(!empty($source_params) and !empty($target_params) and (CrustRouter::$params == $source_params or $source_array[2] == ':params'))
-		{
-			$target_params = ($this->wildcard_keys($target_params[0]) == $target_params[0]) ? $target_params : $this->wildcard_keys($target_params[0]);
-			CrustRouter::$params = $target_params;
-		}
+		// however if it does match
+		CrustRouter::$controller = (!empty($target_array[0])) ? $target_array[0] : $this->default_controller;
+		CrustRouter::$action 	 = (!empty($target_array[1])) ? $target_array[1] : $this->default_action;
+		CrustRouter::$params     = (count($target_array) > 2) ? array_slice($target_array, 2) : array();
 	}
 }

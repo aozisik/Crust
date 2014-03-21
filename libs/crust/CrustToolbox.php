@@ -1,7 +1,7 @@
 <?php
 /**
 * @package Crust Framework
-* @version 0.9.3
+* @version 0.9.4
 * @author Ahmet Özışık
 *
 * Miscellaneous 

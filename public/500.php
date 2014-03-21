@@ -60,14 +60,28 @@
   <div class="alert alert-danger">
     <?php echo $errstr; ?>
   </div>
-  
-  <br><br>Show
+
+<br><br>
+
+  Show
   <script type="text/javascript">
     $('#server').hide();
   </script>
   <a href="javascript:void(0);" onclick="$('#server').fadeToggle()" title="Click to list Php Server parameters">SERVER</a> parameters
-  <br><br>
+  <br>
+  
+  <p>
+  
+    <small>
+      Controller: <?php echo CrustRouter::$controller; ?>,
+      action: <?php echo CrustRouter::$action; ?>
+      params: <?php echo join(CrustRouter::$params, '/'); ?>
+    </small>
+  </p>
+
+  <br>
   <small>Debug pages will not be shown when ENVIRONMENT parameter in app/config.php is set as "production"</small>
+
   </div>
   <div id="server" style="display:none;">
     <table class="detailed_data table">

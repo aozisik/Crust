@@ -1,7 +1,7 @@
 <?php
 /**
 * @package Crust Framework
-* @version 0.9.3
+* @version 0.9.4
 * @author Ahmet Özışık
 *
 * Interface between smarty and crust
@@ -18,11 +18,13 @@ class SmartyAdapter
   public function __construct()
   {
     $this->smarty = new Smarty(); 
-    $this->smarty->compile_dir  = TEMPLATE_COMPILE_FOLDER;
-    $this->smarty->cache_dir    = TEMPLATE_CACHE_FOLDER;
-    $this->smarty->template_dir = VIEWS;
+
+    $this->smarty->setTemplateDir(VIEWS);
+    $this->smarty->setCompileDir(TEMPLATE_COMPILE_FOLDER);
+    $this->smarty->setCacheDir(TEMPLATE_CACHE_FOLDER);
+    $this->smarty->muteExpectedErrors(); // don't whine much
+
     $this->assign('url', URL);
-  
   }
 
   public function assign($name, $value)
