@@ -1,0 +1,14 @@
+#Options +FollowSymLinks
+IndexIgnore */*
+# Turn on the RewriteEngine
+RewriteEngine On
+#  Rules
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . index.php
+
+AddType application/x-font-ttf         ttf
+AddType application/x-font-otf         otf
+AddType application/font-woff          woff
+AddType application/vnd.ms-fontobject  eot
+AddType image/svg+xml                  svg
