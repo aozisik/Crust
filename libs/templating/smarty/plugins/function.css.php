@@ -8,7 +8,8 @@
 
 function smarty_function_css($params, &$smarty)
 {
-  $file  = CSS_PATH.$params['href'];
+  $file  = CrustConfig::get('url').CSS_PATH.$params['href'];
+
   if(NOCACHE === true) $file .= '?'.time();
   $media = (isset($params['media'])) ?  $params['media'] : 'screen';
   

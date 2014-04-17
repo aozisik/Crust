@@ -1,9 +1,9 @@
 <html>
 <head>
 
-  <script type="text/javascript" language="javascript" src="<?php echo URL; ?>public/javascript/jquery.js"></script>
+  <script type="text/javascript" language="javascript" src="<?php echo CrustConfig::getConfigVar('url'); ?>public/javascript/jquery.js"></script>
 
-  <link rel="stylesheet" href="<?php echo URL; ?>public/stylesheets/bootstrap.css" />
+  <link rel="stylesheet" href="<?php echo CrustConfig::getConfigVar('url'); ?>public/stylesheets/bootstrap.css" />
 
   <style type="text/css">
     body

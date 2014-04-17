@@ -27,6 +27,7 @@ abstract class ApplicationController extends SmartyAdapter
         
         $this->Layout('default');
         $this->assign('controller', CrustRouter::$controller);
+        $this->assign('CRUST_VERSION', CRUST_VERSION);
     }
 
     private function load_helper($helper_name, $instance=null)
@@ -80,14 +81,14 @@ abstract class ApplicationController extends SmartyAdapter
         return false;
 
         if(!class_exists($model_name))
-            _debug('Model file not found', $model_name);
+            trigger_error('Model file not found: '.$model_name);
 
         $model = new $model_name();
 
 
 
         if(!method_exists($model, $function_name))
-            _debug('Model method not found', $model_name.'::'.$function_name);
+            trigger_error('Model method not found: '.$model_name.'::'.$function_name);
 
         // İşlemi gerçekleştiriyoruz
 

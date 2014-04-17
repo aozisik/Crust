@@ -20,7 +20,6 @@
  * 
  * @author Ahmet Özışık
  */
-
  class ApplicationHelper
  {
 

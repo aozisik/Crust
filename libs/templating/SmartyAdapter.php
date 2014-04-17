@@ -24,7 +24,8 @@ class SmartyAdapter
     $this->smarty->setCacheDir(TEMPLATE_CACHE_FOLDER);
     $this->smarty->muteExpectedErrors(); // don't whine much
 
-    $this->assign('url', URL);
+    // Automatically assign some of the system variables
+    $this->assign('url', CrustConfig::get('url'));
   }
 
   public function assign($name, $value)

@@ -8,7 +8,7 @@
 
 function smarty_function_img($params, &$smarty)
 {
-  $src   = (filter_var($params['src'], FILTER_VALIDATE_URL)) ? $params['src'] : IMAGES_PATH.$params['src'];
+  $src   = (filter_var($params['src'], FILTER_VALIDATE_URL)) ? $params['src'] : CrustConfig::get('url').IMAGES_PATH.$params['src'];
   $params['alt'] = (isset($params['alt'])) ? $params['alt'] : '';
   $html  = '<img src="'.$src.'" alt="'.$params['alt'].'" ';
   

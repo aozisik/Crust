@@ -18,6 +18,10 @@ class CrustRouter
 	public static $action;
 	public static $params;
 
+	private $mapped_controller;
+	private $mapped_action;
+	private $mapped_params;
+
 
 	public function __construct($default_controller='home', $default_action='index',$subfolder='')
 	{
@@ -26,17 +30,40 @@ class CrustRouter
 		$this->extract_request($_SERVER['REQUEST_URI']);
 	}
 
-	public function run()
+	public function controller_exists($controller)
 	{
-		$class 			 = CrustToolbox::slug(CrustRouter::$controller);
+		$class 			 = CrustToolbox::slug($controller);
 		$controller_path = CONTROLLERS.$class.'.controller.php';
 
-		if(!file_exists($controller_path) or !is_readable($controller_path))
+		return (!file_exists($controller_path) or !is_readable($controller_path)) ? false :  true;
+	}
+
+	public function run()
+	{
+
+		if(!empty($this->mapped_controller))
 		{
-			trigger_error('Controller not found: <b>'.CrustRouter::$controller.'</b>', E_USER_ERROR);
+			CrustRouter::$controller = $this->mapped_controller;
+			CrustRouter::$action 	 = $this->mapped_action;
+			CrustRouter::$params 	 = $this->mapped_params;
+		}
+
+		if(!$this->controller_exists(CrustRouter::$controller))
+		{
+			if(ENVIRONMENT != 'production')
+			{
+				trigger_error('404 Controller not found: <b>'.CrustRouter::$controller.'</b>', E_USER_ERROR);	
+			}else{
+				CrustToolbox::NotFound();
+			}
+			
 			return;
 		}
 			
+
+		$class 			 = CrustToolbox::slug(CrustRouter::$controller);
+		$controller_path = CONTROLLERS.$class.'.controller.php';
+
 		require $controller_path;
 
 		$class    = ucwords($class).'Controller';
@@ -45,7 +72,7 @@ class CrustRouter
 
 		if(!is_callable(array($instance, $call)))
 		{
-			trigger_error('Action does not exist on controller: <b>'.CrustRouter::$controller.':'.CrustRouter::$action.'</b>', E_USER_ERROR);
+			trigger_error('404 Action does not exist on controller: <b>'.CrustRouter::$controller.':'.CrustRouter::$action.'</b>', E_USER_ERROR);
 			return;
 		}
 
@@ -54,7 +81,7 @@ class CrustRouter
 
 	private function routing_sanitize($param)
 	{
-		return strip_tags($param);
+		return strtolower(strip_tags($param));
 	}
 
 	public function extract_request($request_uri)
@@ -63,7 +90,16 @@ class CrustRouter
 		$process 		   = $this->request_uri;
 
 		if(SUB_FOLDER)
+		{
 			$process = substr($process, strlen(SUB_FOLDER), strlen($process));
+		}
+
+		if(substr($process, 0, 1) == '/')
+		{
+			$process = substr($process, 1, strlen($process));
+		}
+			
+
 
 		// clear any query strings
 		$process = str_replace('?'.$_SERVER['QUERY_STRING'], '', $process);
@@ -126,8 +162,8 @@ class CrustRouter
 			return; // this map does not concern us, it is not a match
 
 		// however if it does match
-		CrustRouter::$controller = (!empty($target_array[0])) ? $target_array[0] : $this->default_controller;
-		CrustRouter::$action 	 = (!empty($target_array[1])) ? $target_array[1] : $this->default_action;
-		CrustRouter::$params     = (count($target_array) > 2) ? array_slice($target_array, 2) : array();
+		$this->mapped_controller = (!empty($target_array[0])) ? $target_array[0] : $this->default_controller;
+		$this->mapped_action 	 = (!empty($target_array[1])) ? $target_array[1] : $this->default_action;
+		$this->mapped_params     = (count($target_array) > 2) ? array_slice($target_array, 2) : array();
 	}
 }
